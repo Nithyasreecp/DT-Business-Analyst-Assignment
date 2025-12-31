@@ -86,6 +86,130 @@ If required, Google Apps Script can monitor Sheet updates and:
 - Update message status automatically
 - Generate daily summary reports for doctors
 
+
+# Task 1: Daily Clinic Inventory Micro-Audit
+
+## Objective
+Design a daily micro-audit routine that detects sales-entry errors early, improves billing discipline, and prevents month-end inventory shocks without consuming doctor time.
+
+---
+
+## Daily Micro-Audit Checklist (20–30 mins/day)
+
+### STEP 1 — Identify High-Risk Medicines (One-Time Setup)
+
+High-risk medicines are selected based on:
+- High daily sales volume
+- Similar or confusing name variations
+- Frequent prescription by the doctor
+- Higher value per unit
+
+**High-Risk List Example**
+
+| Medicine (Master) | Why High Risk |
+|-------------------|--------------|
+| Dolo 650 | High volume + multiple name variations |
+| Azithromycin 500 | Abbreviations commonly used |
+| Pantoprazole 40 | Prescribed frequently |
+
+⏱ Time: ~30 minutes (one-time)
+
+---
+
+### STEP 2 — Daily Name-Variation Check (10 mins/day)
+
+**What is done:**
+- Filter sales register for high-risk medicines only
+- Group similar entered names manually or visually
+
+**Example Mapping**
+
+| Entered Name Variants | Mapped To |
+|----------------------|-----------|
+| Dolo / Dolo kind / Dolo 650 | Dolo 650 |
+| Azithro 500 / Azithromycin | Azithromycin 500 |
+
+**What is flagged:**
+- New or unusual name variants
+- Misspellings not seen earlier
+
+**Action:**
+- Add variant to mapping list
+- Inform billing staff to use standard name
+
+---
+
+### STEP 3 — Daily Usage Reasonableness Check (10 mins/day)
+
+For each high-risk medicine:
+
+**Expected Closing Stock = Opening Stock + Purchases − Total Sales**
+
+Compare expected vs actual closing stock.
+
+**Tolerance:** ±2%
+
+**Example**
+
+| Medicine | Expected | Actual | Difference | Action |
+|--------|---------|--------|------------|--------|
+| Dolo 650 | 1,460 | 1,440 | −20 | Review sales entries |
+
+Focus is on **patterns**, not perfect matching.
+
+---
+
+### STEP 4 — Random Bill Spot Check (5–10 mins/day)
+
+**What is done:**
+- Randomly select 3–5 bills involving high-risk medicines
+- Verify:
+  - Medicine name matches master
+  - Quantity is reasonable vs prescription
+
+**Why random:**
+- Staff never knows which bill is checked
+- Improves attention and double-checking behavior
+
+**Outcome:**
+- Errors logged
+- No punishment — only correction
+
+---
+
+## Weekly Checklist (15 mins/week)
+
+### STEP 5 — Pattern Tracking
+
+Maintain a simple error log.
+
+| Date | Medicine | Error Type | Repeated? |
+|------|---------|------------|-----------|
+| Aug 1 | Dolo 650 | Name variation | Yes |
+| Aug 3 | Dolo 650 | Wrong quantity | No |
+
+**Decision Rules:**
+- Same error ≥3 times → staff retraining
+- Multiple medicines affected → SOP update
+
+---
+
+## Doctor Escalation Rules
+
+Doctor involvement only when:
+- Financial impact is material
+- Error pattern persists despite correction
+- Inventory issue affects patient treatment availability
+
+All routine corrections are handled by the analyst and staff.
+
+---
+
+## Conclusion
+
+This daily micro-audit system creates early visibility into errors, improves staff discipline through small consistent checks, and prevents month-end inventory shocks while fully protecting doctor time.
+
+
 Automation is layered only after workflow stability.
 
 
