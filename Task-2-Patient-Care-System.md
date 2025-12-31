@@ -1,42 +1,94 @@
-## 2. Daily Statistical / Randomized Micro-Audit Design
+# Task 2: Patient Care & Communication System Design
 
-All checks are designed to run daily in under 15 minutes.
+## Objective
 
-### a. High-Frequency SKU Check (Pareto-Based)
-- Identify top 10 medicines by daily sales frequency
-- Daily statistical check:
+Design a simple, scalable patient care and follow-up communication system that automates routine interactions, reduces WhatsApp chaos, and minimizes doctor cognitive load while preserving care quality.
+
+---
+
+## 1. Patient Message Classification Framework
+
+Patient messages are classified based on decision complexity and risk.
+
+### a. Fully Automated Messages
+Examples:
+- Appointment reminders
+- Lab report availability notifications
+- Post-visit care instructions
+- Medicine refill reminders
+
+These messages are consistent across patients and do not require clinical judgement.
+
+---
+
+### b. Human-in-the-Loop (Staff Managed)
+Examples:
+- Clarification on dosage timing
+- Routine symptom updates
+- Follow-up scheduling questions
+
+Staff respond using predefined templates and escalate only when necessary.
+
+---
+
+### c. Doctor Escalation Only
+Examples:
+- New or worsening symptoms
+- Adverse drug reactions
+- Emergency indicators
+
+Only summarized, decision-ready cases reach the doctor.
+
+## 2. Google Sheets–Based Control System
+
+### Sheet 1: Patient Communication Log
+Tracks all interactions and ownership.
+
+| Patient ID | Visit Date | Message Type | Category | Status | Owner | Escalated |
+|-----------|------------|--------------|----------|--------|-------|-----------|
+
+---
+
+### Sheet 2: Automation Rules
+Defines which messages are triggered automatically.
+
+| Trigger Event | Message Template | Timing | Channel |
+|--------------|------------------|--------|---------|
+| Visit End | Care Instructions | Immediate | WhatsApp |
+| Lab Ready | Report Notification | Auto | WhatsApp |
+| Post-Visit | Follow-up Check | +3 Days | WhatsApp |
+
+---
+
+### Sheet 3: Doctor Escalation View
+Filtered view showing:
+- Patient summary
+- Staff notes
+- Exact decision required
+
+Doctor interaction time per case is minimized.
 
 
-- Small variance is acceptable; repeated deviation is flagged
+## 3. Doctor Cognitive Load Minimization
 
-**Reason:**  
-Most entry errors occur in fast-moving medicines, not rare items.
+- Doctor is removed from routine messaging
+- Only exceptions reach the doctor
+- No message scrolling or context reconstruction
+- Decisions are made from structured summaries
 
-
-
-### b. Random SKU Sampling
-- Each day, randomly select 3–5 medicines
-- Physically count and compare with system stock
-- Track deviation trend, not one-time mismatch
-
-**Reason:**  
-Randomization prevents selective compliance and builds discipline.
+This preserves doctor focus and authority.
 
 
+## 4. Optional Automation Layer
 
-### c. Anomaly & Trigger-Based Flags
+If required, Google Apps Script can monitor Sheet updates and:
+- Trigger WhatsApp/SMS APIs
+- Update message status automatically
+- Generate daily summary reports for doctors
 
-Automatically flag when:
-- Stock becomes negative
-- Same medicine is manually adjusted multiple times per week
-- Sales quantity suddenly spikes compared to recent average
-
-These are signals of workflow issues, not reconciliation failures.
-
+Automation is layered only after workflow stability.
 
 
-### d. Strip vs Tablet Ratio Monitoring
+## Conclusion
 
-For medicines sold in both forms:
-- Track daily tablet-to-strip sales ratio
-- Sudden deviation from historical pattern indicates a probable entry error
+This system transforms patient communication from reactive WhatsApp handling into a structured, auditable, and scalable workflow that preserves care quality while protecting doctor time.
