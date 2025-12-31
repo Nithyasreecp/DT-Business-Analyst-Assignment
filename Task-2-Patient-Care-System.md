@@ -203,7 +203,7 @@ Doctor involvement only when:
 
 All routine corrections are handled by the analyst and staff.
 
----
+
 
 ## Conclusion
 
@@ -213,6 +213,119 @@ This daily micro-audit system creates early visibility into errors, improves sta
 Automation is layered only after workflow stability.
 
 
+# Task 2: Patient Care & Communication System
+
+## Objective
+Design a Google Sheet–based care and communication control system that automates routine patient messages, ensures timely follow-ups, and limits doctor involvement to brief, decision-only review windows.
+
+---
+
+## STEP 1 — Message Type Classification (One-Time Setup)
+
+Create a master list of message types and whether doctor input is required.
+
+| Message Type | Example | Doctor Input Needed |
+|-------------|---------|---------------------|
+| Follow-up Reminder | “Please visit on Aug 5” | No |
+| Post-Procedure Care | “Mild swelling is normal” | No |
+| Side-Effect Advisory | “Nausea may occur” | No |
+| Custom Instruction | “Avoid sun exposure for 7 days” | Yes |
+| Patient Question Response | “Regarding itching…” | Yes |
+
+⏱️ Time: ~20 minutes (one-time)
+
+---
+
+## STEP 2 — Care Control Sheet (Daily Working Sheet)
+
+Create a Google Sheet named **Care_Control** where every patient communication is tracked.
+
+| Patient | Phone | Visit Type | Message Type | Message Text | Doctor Approval | Status |
+|--------|------|------------|--------------|--------------|----------------|--------|
+| Ramesh K | 9XXXX | OPD | Follow-up | Auto-filled | Not Required | Pending |
+| Sita P | 9XXXX | Procedure | Post-Procedure | Auto-filled | Not Required | Pending |
+| Arjun M | 9XXXX | OPD | Custom | Blank | Required | Waiting |
+
+This sheet acts as the single source of truth for all patient messaging.
+
+---
+
+## STEP 3 — Doctor Review Window (Every 3–4 Hours)
+
+**What is done:**
+- Filter **Care_Control** sheet where:
+  - Doctor Approval = Required
+  - Status = Waiting
+- Sit with doctor for **10 minutes**
+- Doctor dictates or approves messages
+- Analyst enters text once
+
+**Doctor never:**
+- Types messages
+- Opens WhatsApp
+- Replies individually
+
+---
+
+## STEP 4 — Patient Question Handling (Google Form Flow)
+
+Patients submit questions via a Google Form.
+
+**Form Fields:**
+- Name
+- Phone
+- Question
+- Urgency (Routine / Urgent)
+
+Responses auto-populate a sheet named **Patient_Questions**.
+
+| Patient | Phone | Question | Answer | Status |
+|--------|------|----------|--------|--------|
+| Lakshmi | 9XXXX | Is itching normal? | — | Pending |
+
+**Execution:**
+- Batch questions every 3 hours
+- Review with doctor once
+- Record answers
+- Send responses
+
+---
+
+## STEP 5 — Message Dispatch Logic
+
+Messages are sent only when:
+- Message Text is filled
+- Status = Pending
+- Doctor Approval = Not Required **OR** Approved
+
+**Status Flow:**  
+Pending → Sent → Closed
+
+---
+
+## STEP 6 — Daily Closing Check (5 mins/day)
+
+Before clinic closes:
+- Filter Status = Pending
+- Ensure no critical messages are missed
+- Reschedule or escalate if required
+
+---
+
+## STEP 7 — Optional Automation Layer (Differentiator)
+
+If required:
+- Google Apps Script reads rows where Status = Pending
+- Sends WhatsApp/SMS messages via API
+- Updates Status to “Sent”
+
+Automation is applied only after workflow stability.
+
+---
+
 ## Conclusion
 
-This system transforms patient communication from reactive WhatsApp handling into a structured, auditable, and scalable workflow that preserves care quality while protecting doctor time.
+This system converts unstructured WhatsApp communication into a controlled, auditable workflow that ensures consistent patient care while limiting doctor involvement to short, decision-focused review sessions.
+
+
+
